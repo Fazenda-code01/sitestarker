@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
- 
+
   <script>
     tailwind.config = {
       theme: {
@@ -45,7 +45,7 @@
       },
     }
   </script>
- 
+
   <style>
     /* ── global ── */
     *, *::before, *::after { box-sizing: border-box; }
@@ -57,7 +57,7 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
- 
+
     /* ── noise texture overlay ── */
     body::before {
       content: '';
@@ -68,7 +68,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
       opacity: 0.4;
     }
- 
+
     /* ── red grid scan lines ── */
     .scan-grid {
       background-image:
@@ -76,7 +76,7 @@
         linear-gradient(90deg, rgba(255,0,0,0.03) 1px, transparent 1px);
       background-size: 48px 48px;
     }
- 
+
     /* ── hero title ── */
     .hero-title {
       font-size: clamp(2.6rem, 8vw, 7rem);
@@ -84,7 +84,7 @@
       line-height: 1.0;
       letter-spacing: -0.03em;
     }
- 
+
     /* ── red glow button ── */
     .btn-red {
       display: inline-block;
@@ -105,7 +105,7 @@
       box-shadow: 0 0 40px rgba(255,0,0,0.7), 0 0 80px rgba(255,0,0,0.3);
       animation: none;
     }
- 
+
     /* ── secondary border button ── */
     .btn-outline {
       display: inline-block;
@@ -124,7 +124,7 @@
       color: #fff;
       box-shadow: 0 0 28px rgba(255,0,0,0.5);
     }
- 
+
     /* ── section separator ── */
     .sep {
       width: 64px;
@@ -132,7 +132,7 @@
       background: #FF0000;
       margin: 0 auto;
     }
- 
+
     /* ── method card ── */
     .method-card {
       border: 1px solid #2a2a2a;
@@ -143,7 +143,7 @@
       border-color: #FF0000;
       box-shadow: 0 0 24px rgba(255,0,0,0.12);
     }
- 
+
     /* ── before/after blocks ── */
     .card-chaos {
       border: 1px solid #2f2f2f;
@@ -154,11 +154,11 @@
       background: #0a0000;
       box-shadow: 0 0 40px rgba(255,0,0,0.10), inset 0 0 40px rgba(255,0,0,0.04);
     }
- 
+
     /* ── list item check/cross ── */
     .icon-cross { color: #555; }
     .icon-check { color: #FF0000; }
- 
+
     /* ── fade-up on scroll ── */
     .reveal {
       opacity: 0;
@@ -169,10 +169,267 @@
       opacity: 1;
       transform: translateY(0);
     }
- 
-    /* ── nav bar ── */
-    .navbar { border-bottom: 1px solid #1a1a1a; }
- 
+
+    /* ══════════════════════════════════
+       NAV BAR — transparent → black on scroll
+    ══════════════════════════════════ */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      /* start fully transparent */
+      background: transparent;
+      transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease, box-shadow 0.35s ease;
+      border-bottom: 1px solid transparent;
+    }
+    .navbar.scrolled {
+      background: rgba(0, 0, 0, 0.97);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: #1a1a1a;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.8);
+    }
+
+    /* mobile menu */
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: #000;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .mobile-menu.open { display: flex; }
+
+    /* ══════════════════════════════════
+       SERVICE CARDS (Engrenagens)
+    ══════════════════════════════════ */
+    .service-card {
+      border: 1px solid #2a2a2a;
+      background: #080808;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+      cursor: default;
+    }
+    /* top-left accent corner */
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 40px; height: 40px;
+      border-top: 2px solid transparent;
+      border-left: 2px solid transparent;
+      transition: border-color 0.35s ease, width 0.35s ease, height 0.35s ease;
+    }
+    /* bottom-right accent corner */
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 40px; height: 40px;
+      border-bottom: 2px solid transparent;
+      border-right: 2px solid transparent;
+      transition: border-color 0.35s ease, width 0.35s ease, height 0.35s ease;
+    }
+    .service-card:hover {
+      border-color: #FF0000;
+      box-shadow:
+        0 0 0 1px rgba(255,0,0,0.15),
+        0 0 30px rgba(255,0,0,0.18),
+        0 0 60px rgba(255,0,0,0.08),
+        inset 0 0 30px rgba(255,0,0,0.04);
+      transform: translateY(-4px);
+    }
+    .service-card:hover::before {
+      border-color: #FF0000;
+      width: 70px; height: 70px;
+    }
+    .service-card:hover::after {
+      border-color: #FF0000;
+      width: 70px; height: 70px;
+    }
+    .service-card .icon-box {
+      width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #2a2a2a;
+      background: #0f0f0f;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.35s, background 0.35s, box-shadow 0.35s;
+    }
+    .service-card:hover .icon-box {
+      border-color: #FF0000;
+      background: rgba(255,0,0,0.08);
+      box-shadow: 0 0 16px rgba(255,0,0,0.25);
+    }
+    .service-card .icon-box svg {
+      transition: filter 0.35s;
+    }
+    .service-card:hover .icon-box svg {
+      filter: drop-shadow(0 0 6px rgba(255,0,0,0.6));
+    }
+
+    /* ══════════════════════════════════
+       METHODOLOGY TIMELINE
+    ══════════════════════════════════ */
+    .pillar-line {
+      position: relative;
+    }
+    /* the vertical connecting line on desktop */
+    .pillar-connector {
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, #FF0000 20%, #FF0000 80%, transparent);
+      transform: translateX(-50%);
+      opacity: 0.3;
+    }
+
+    .pillar-card {
+      border: 1px solid #1e1e1e;
+      background: #070707;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .pillar-card:hover {
+      border-color: rgba(255,0,0,0.4);
+      box-shadow: 0 0 20px rgba(255,0,0,0.08);
+    }
+    .pillar-number {
+      font-size: clamp(4rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,0,0,0.15);
+      position: absolute;
+      right: 1.5rem;
+      top: 1rem;
+      pointer-events: none;
+      transition: -webkit-text-stroke-color 0.3s;
+    }
+    .pillar-card:hover .pillar-number {
+      -webkit-text-stroke-color: rgba(255,0,0,0.3);
+    }
+
+    /* ══════════════════════════════════
+       FAQ ACCORDION
+    ══════════════════════════════════ */
+    .faq-item {
+      border: 1px solid #1e1e1e;
+      background: #070707;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .faq-item.open {
+      border-color: rgba(255,0,0,0.35);
+    }
+    .faq-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      color: #fff;
+      text-align: left;
+      gap: 1rem;
+    }
+    .faq-trigger:hover .faq-q {
+      color: #FF0000;
+    }
+    .faq-q {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+    .faq-icon {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border: 1px solid #2a2a2a;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.3s, transform 0.35s, background 0.3s;
+      font-size: 1.1rem;
+      color: #FF0000;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      border-color: #FF0000;
+      background: rgba(255,0,0,0.08);
+    }
+    .faq-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), padding 0.35s ease;
+    }
+    .faq-body.open {
+      max-height: 300px;
+    }
+    .faq-body-inner {
+      padding: 0 2rem 1.75rem;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    /* ══════════════════════════════════
+       PROFESSIONAL FOOTER
+    ══════════════════════════════════ */
+    .footer-pro {
+      border-top: 1px solid #1a1a1a;
+      background: #030303;
+      position: relative;
+    }
+    .footer-pro::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #FF0000 40%, #FF0000 60%, transparent);
+      opacity: 0.5;
+    }
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid #2a2a2a;
+      display: flex; align-items: center; justify-content: center;
+      color: #666;
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .social-link:hover {
+      border-color: #FF0000;
+      color: #FF0000;
+      box-shadow: 0 0 12px rgba(255,0,0,0.25);
+    }
+    .footer-nav-link {
+      color: #555;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .footer-nav-link:hover { color: #FF0000; }
+
+    /* ── stat highlight ── */
+    .stat-num {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 900;
+      color: #FF0000;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── red divider line ── */
+    .red-rule { border: none; border-top: 1px solid #FF0000; opacity: 0.2; }
+
     /* ── WhatsApp float ── */
     .wa-float {
       position: fixed;
@@ -192,68 +449,88 @@
     }
     .wa-float:hover { transform: scale(1.1); animation: none; }
     .wa-float svg { width: 30px; height: 30px; fill: white; }
- 
-    /* ── red divider line ── */
-    .red-rule { border: none; border-top: 1px solid #FF0000; opacity: 0.2; }
- 
-    /* ── stat highlight ── */
-    .stat-num {
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      font-weight: 900;
-      color: #FF0000;
-      line-height: 1;
-      letter-spacing: -0.03em;
-    }
   </style>
 </head>
- 
+
 <body>
- 
+
   <!-- ══════════════════════════════════
-       NAVBAR
+       NAVBAR — transparent → scrolled
   ══════════════════════════════════ -->
-  <nav class="navbar fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-95 backdrop-blur-sm px-6 py-4 flex items-center justify-between">
-    <span class="text-white font-black text-xl tracking-widest uppercase">
-      STARK<span class="text-brand">ER</span>
-    </span>
-    <a href="https://wa.me/559281660856?text=Olá%20Helio,%20vi%20o%20site%20da%20STARKER%20e%20quero%20o%20Padrão%20Starker%20na%20minha%20empresa!"
-       target="_blank"
-       class="btn-outline text-sm px-5 py-2 hidden md:inline-block">
-      Falar Agora
-    </a>
+  <nav id="navbar" class="navbar px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+
+      <!-- logo -->
+      <a href="#hero" class="text-white font-black text-xl tracking-widest uppercase no-underline">
+        STARK<span class="text-brand">ER</span>
+      </a>
+
+      <!-- desktop links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#servicos" class="footer-nav-link" style="color:#999">Serviços</a>
+        <a href="#metodologia" class="footer-nav-link" style="color:#999">Metodologia</a>
+        <a href="#faq" class="footer-nav-link" style="color:#999">FAQ</a>
+      </div>
+
+      <!-- CTA + hamburger -->
+      <div class="flex items-center gap-4">
+        <a href="https://wa.me/559281660856?text=Olá%20Helio,%20vi%20o%20site%20da%20STARKER%20e%20quero%20o%20Padrão%20Starker%20na%20minha%20empresa!"
+           target="_blank"
+           class="btn-outline text-xs px-5 py-2 hidden md:inline-block">
+          Falar Agora
+        </a>
+        <!-- hamburger -->
+        <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+          <span class="w-6 h-0.5 bg-white transition-all duration-300" id="ham-1"></span>
+          <span class="w-6 h-0.5 bg-white transition-all duration-300" id="ham-2"></span>
+          <span class="w-6 h-0.5 bg-white transition-all duration-300" id="ham-3"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- mobile dropdown -->
+    <div id="mobile-menu" class="mobile-menu">
+      <a href="#servicos" class="footer-nav-link text-base" style="color:#ccc" onclick="closeMenu()">Serviços</a>
+      <a href="#metodologia" class="footer-nav-link text-base" style="color:#ccc" onclick="closeMenu()">Metodologia</a>
+      <a href="#faq" class="footer-nav-link text-base" style="color:#ccc" onclick="closeMenu()">FAQ</a>
+      <a href="https://wa.me/559281660856?text=Olá%20Helio,%20vi%20o%20site%20da%20STARKER%20e%20quero%20o%20Padrão%20Starker%20na%20minha%20empresa!"
+         target="_blank" class="btn-red text-center text-sm mt-2">
+        Falar Agora
+      </a>
+    </div>
   </nav>
- 
- 
+
+
   <!-- ══════════════════════════════════
        HERO
   ══════════════════════════════════ -->
-  <section class="scan-grid relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-28 pb-24">
- 
+  <section id="hero" class="scan-grid relative min-h-screen flex flex-col justify-center items-center text-center px-6 pt-28 pb-24">
+
     <!-- decorative corner lines -->
     <div class="absolute top-20 left-6 w-16 h-16 border-t border-l border-brand opacity-40 pointer-events-none"></div>
     <div class="absolute top-20 right-6 w-16 h-16 border-t border-r border-brand opacity-40 pointer-events-none"></div>
     <div class="absolute bottom-12 left-6 w-16 h-16 border-b border-l border-brand opacity-40 pointer-events-none"></div>
     <div class="absolute bottom-12 right-6 w-16 h-16 border-b border-r border-brand opacity-40 pointer-events-none"></div>
- 
+
     <!-- overline tag -->
     <div class="reveal mb-6 inline-flex items-center gap-2 border border-muted text-xs uppercase tracking-widest text-gray-400 px-4 py-1.5">
       <span class="w-2 h-2 bg-brand rounded-full inline-block"></span>
       Consultoria de Alta Performance
     </div>
- 
+
     <!-- main title -->
     <h1 class="reveal hero-title text-white max-w-6xl">
       ENGENHARIA DE<br/>
       <span class="text-brand">PERFORMANCE</span><br/>
       PARA EMPRESAS
     </h1>
- 
+
     <!-- sub headline -->
     <p class="reveal mt-8 text-lg md:text-2xl text-gray-400 max-w-2xl font-light leading-relaxed" style="transition-delay:0.15s">
       Nós não fazemos <span class="text-white font-semibold">postinhos</span>.
       Nós instalamos <span class="text-brand font-semibold">máquinas de lucro</span>.
     </p>
- 
+
     <!-- CTA -->
     <div class="reveal mt-12" style="transition-delay:0.3s">
       <a href="https://wa.me/559281660856?text=Olá%20Helio,%20vi%20o%20site%20da%20STARKER%20e%20quero%20o%20Padrão%20Starker%20na%20minha%20empresa!"
@@ -262,15 +539,15 @@
         QUERO MEU DIAGNÓSTICO
       </a>
     </div>
- 
+
     <!-- scroll hint -->
     <div class="reveal absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30" style="transition-delay:0.5s">
       <span class="text-xs uppercase tracking-widest text-gray-500">Scroll</span>
       <div class="w-px h-10 bg-gradient-to-b from-gray-500 to-transparent"></div>
     </div>
   </section>
- 
- 
+
+
   <!-- ══════════════════════════════════
        STATS STRIP
   ══════════════════════════════════ -->
@@ -294,15 +571,105 @@
       </div>
     </div>
   </section>
- 
- 
+
+
   <!-- ══════════════════════════════════
-       O MÉTODO (ENGRENAGENS)
+       GRADE DE SERVIÇOS (Engrenagens)
   ══════════════════════════════════ -->
-  <section class="py-28 px-6">
-    <div class="max-w-5xl mx-auto">
- 
+  <section id="servicos" class="py-28 px-6">
+    <div class="max-w-6xl mx-auto">
+
       <!-- heading -->
+      <div class="reveal text-center mb-16">
+        <p class="text-brand text-xs uppercase tracking-widest mb-3">O Que Entregamos</p>
+        <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
+          NOSSOS <span class="text-brand">SERVIÇOS</span>
+        </h2>
+        <div class="sep mt-6"></div>
+        <p class="text-gray-400 mt-6 max-w-xl mx-auto text-base">
+          Quatro engrenagens que, quando operando juntas, transformam empresas comuns em máquinas de escala.
+        </p>
+      </div>
+
+      <!-- 4-card grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+        <!-- Automação Inteligente -->
+        <div class="reveal service-card" style="transition-delay:0s">
+          <div class="icon-box">
+            <!-- gear icon -->
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-black text-lg mb-3 uppercase tracking-wide">Automação<br/>Inteligente</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Fluxos automáticos que eliminam o trabalho repetitivo. CRM, onboarding, follow-up e relatórios — tudo rodando sem intervenção humana.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold">→ Processo → Resultado</span>
+          </div>
+        </div>
+
+        <!-- Inteligência Artificial -->
+        <div class="reveal service-card" style="transition-delay:0.08s">
+          <div class="icon-box">
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-2"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-black text-lg mb-3 uppercase tracking-wide">Inteligência<br/>Artificial</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            IA aplicada em atendimento 24h, qualificação de leads, previsão de demanda e personalização em escala. Decisões guiadas por dados.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold">→ Dados → Decisão</span>
+          </div>
+        </div>
+
+        <!-- Gestão de Tráfego -->
+        <div class="reveal service-card" style="transition-delay:0.16s">
+          <div class="icon-box">
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-black text-lg mb-3 uppercase tracking-wide">Gestão de<br/>Tráfego</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Tráfego pago e orgânico gerenciados em sinergia para gerar leads qualificados, reduzir CAC e criar previsibilidade de faturamento.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold">→ Tráfego → Lucro</span>
+          </div>
+        </div>
+
+        <!-- Consultoria Estratégica -->
+        <div class="reveal service-card" style="transition-delay:0.24s">
+          <div class="icon-box">
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-white font-black text-lg mb-3 uppercase tracking-wide">Consultoria<br/>Estratégica</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Diagnóstico profundo, mapa de gargalos e plano de ação executável. Estratégia que sai do papel e gera resultados em semanas, não anos.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold">→ Visão → Execução</span>
+          </div>
+        </div>
+
+      </div><!-- /grid -->
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       O MÉTODO (3 pilares originais)
+  ══════════════════════════════════ -->
+  <section class="py-28 px-6 border-y border-sharp">
+    <div class="max-w-5xl mx-auto">
       <div class="reveal text-center mb-16">
         <p class="text-brand text-xs uppercase tracking-widest mb-3">Como Operamos</p>
         <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
@@ -313,11 +680,7 @@
           Três pilares integrados que transformam empresas comuns em máquinas de escala.
         </p>
       </div>
- 
-      <!-- cards grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
- 
-        <!-- Automação -->
         <div class="reveal method-card p-8">
           <div class="mb-6 w-12 h-12 flex items-center justify-center border border-brand">
             <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -325,15 +688,9 @@
             </svg>
           </div>
           <h3 class="text-white font-black text-xl mb-3 uppercase tracking-wide">Automação</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            Eliminamos processos manuais e repetitivos. Seu time foca em estratégia; as máquinas fazem o resto — 24h por dia, 7 dias por semana.
-          </p>
-          <div class="mt-6 pt-6 border-t border-sharp text-xs text-brand uppercase tracking-widest font-semibold">
-            → Processos → Resultados
-          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">Eliminamos processos manuais e repetitivos. Seu time foca em estratégia; as máquinas fazem o resto — 24h por dia, 7 dias por semana.</p>
+          <div class="mt-6 pt-6 border-t border-sharp text-xs text-brand uppercase tracking-widest font-semibold">→ Processos → Resultados</div>
         </div>
- 
-        <!-- IA -->
         <div class="reveal method-card p-8" style="transition-delay:0.1s">
           <div class="mb-6 w-12 h-12 flex items-center justify-center border border-brand">
             <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -341,15 +698,9 @@
             </svg>
           </div>
           <h3 class="text-white font-black text-xl mb-3 uppercase tracking-wide">Inteligência Artificial</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            IA aplicada em atendimento, previsão de demanda e personalização. Decisões baseadas em dados, não em achismo.
-          </p>
-          <div class="mt-6 pt-6 border-t border-sharp text-xs text-brand uppercase tracking-widest font-semibold">
-            → Dados → Decisão
-          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">IA aplicada em atendimento, previsão de demanda e personalização. Decisões baseadas em dados, não em achismo.</p>
+          <div class="mt-6 pt-6 border-t border-sharp text-xs text-brand uppercase tracking-widest font-semibold">→ Dados → Decisão</div>
         </div>
- 
-        <!-- Tráfego -->
         <div class="reveal method-card p-8" style="transition-delay:0.2s">
           <div class="mb-6 w-12 h-12 flex items-center justify-center border border-brand">
             <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -357,26 +708,181 @@
             </svg>
           </div>
           <h3 class="text-white font-black text-xl mb-3 uppercase tracking-wide">Gestão de Tráfego</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">
-            Tráfego pago e orgânico gerenciados juntos para gerar leads qualificados e previsibilidade de faturamento.
-          </p>
-          <div class="mt-6 pt-6 border-t border-sharp text-xs text-brand uppercase tracking-widest font-semibold">
-            → Tráfego → Lucro
-          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">Tráfego pago e orgânico gerenciados juntos para gerar leads qualificados e previsibilidade de faturamento.</p>
+          <div class="mt-6 pt-6 border-t border-sharp text-xs text-brand uppercase tracking-widest font-semibold">→ Tráfego → Lucro</div>
         </div>
- 
       </div>
     </div>
   </section>
- 
- 
+
+
+  <!-- ══════════════════════════════════
+       METODOLOGIA — 4 PILARES (Timeline)
+  ══════════════════════════════════ -->
+  <section id="metodologia" class="py-28 px-6 bg-black">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- heading -->
+      <div class="reveal text-center mb-20">
+        <p class="text-brand text-xs uppercase tracking-widest mb-3">Nossa Metodologia</p>
+        <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
+          OS 4 <span class="text-brand">PILARES</span>
+        </h2>
+        <div class="sep mt-6"></div>
+        <p class="text-gray-400 mt-6 max-w-xl mx-auto text-base">
+          Um ciclo de crescimento contínuo, calculado e irreversível. Da atração ao domínio de mercado.
+        </p>
+      </div>
+
+      <!-- Desktop: horizontal timeline | Mobile: vertical stack -->
+      <div class="hidden md:flex items-stretch gap-0 relative">
+
+        <!-- connecting line between pillars -->
+        <div class="absolute top-12 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, rgba(255,0,0,0.4) 15%, rgba(255,0,0,0.4) 85%, transparent); pointer-events:none;"></div>
+
+        <!-- Pillar 1: Aquisição -->
+        <div class="reveal flex-1 pillar-card p-8 mx-2 flex flex-col" style="transition-delay:0s">
+          <div class="pillar-number">01</div>
+          <div class="w-10 h-10 border border-brand flex items-center justify-center mb-6 relative z-10 bg-black">
+            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <span class="text-brand text-xs uppercase tracking-widest font-bold mb-2 block">Fase 01</span>
+          <h3 class="text-white font-black text-2xl uppercase mb-4 leading-tight">Aquisição</h3>
+          <p class="text-gray-500 text-sm leading-relaxed flex-1">
+            Construímos o funil de atração. Tráfego pago, SEO, conteúdo estratégico e parcerias que trazem prospects qualificados — não visitantes aleatórios.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-xs text-gray-600 uppercase tracking-wider">Leads Qualificados ↑</span>
+          </div>
+        </div>
+
+        <!-- Pillar 2: Conversão -->
+        <div class="reveal flex-1 pillar-card p-8 mx-2 flex flex-col" style="transition-delay:0.1s">
+          <div class="pillar-number">02</div>
+          <div class="w-10 h-10 border border-brand flex items-center justify-center mb-6 relative z-10 bg-black">
+            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <span class="text-brand text-xs uppercase tracking-widest font-bold mb-2 block">Fase 02</span>
+          <h3 class="text-white font-black text-2xl uppercase mb-4 leading-tight">Conversão</h3>
+          <p class="text-gray-500 text-sm leading-relaxed flex-1">
+            Otimizamos cada ponto de contato. Páginas de alta conversão, sequências de e-mail automatizadas, chatbots com IA e processos de vendas afiados ao extremo.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-xs text-gray-600 uppercase tracking-wider">Taxa de Fechamento ↑</span>
+          </div>
+        </div>
+
+        <!-- Pillar 3: Monetização -->
+        <div class="reveal flex-1 pillar-card p-8 mx-2 flex flex-col" style="transition-delay:0.2s">
+          <div class="pillar-number">03</div>
+          <div class="w-10 h-10 border border-brand flex items-center justify-center mb-6 relative z-10 bg-black">
+            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <span class="text-brand text-xs uppercase tracking-widest font-bold mb-2 block">Fase 03</span>
+          <h3 class="text-white font-black text-2xl uppercase mb-4 leading-tight">Monetização</h3>
+          <p class="text-gray-500 text-sm leading-relaxed flex-1">
+            Maximizamos o LTV de cada cliente. Upsells estratégicos, programas de fidelização, precificação inteligente e retenção por valor, não por preço.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-xs text-gray-600 uppercase tracking-wider">Ticket Médio ↑</span>
+          </div>
+        </div>
+
+        <!-- Pillar 4: Escala -->
+        <div class="reveal flex-1 pillar-card p-8 mx-2 flex flex-col" style="transition-delay:0.3s">
+          <div class="pillar-number">04</div>
+          <div class="w-10 h-10 border border-brand flex items-center justify-center mb-6 relative z-10 bg-black">
+            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+          </div>
+          <span class="text-brand text-xs uppercase tracking-widest font-bold mb-2 block">Fase 04</span>
+          <h3 class="text-white font-black text-2xl uppercase mb-4 leading-tight">Escala</h3>
+          <p class="text-gray-500 text-sm leading-relaxed flex-1">
+            Com as três fases funcionando, amplificamos tudo. Mais budget, mais canais, mais mercados. Crescimento previsível, estruturado e sustentável sem o caos habitual.
+          </p>
+          <div class="mt-6 pt-5 border-t border-sharp">
+            <span class="text-xs text-gray-600 uppercase tracking-wider">Receita Recorrente ↑</span>
+          </div>
+        </div>
+
+      </div><!-- /desktop timeline -->
+
+      <!-- Mobile: vertical timeline -->
+      <div class="flex flex-col gap-0 md:hidden relative">
+        <!-- vertical line -->
+        <div class="absolute left-8 top-0 bottom-0 w-px" style="background: linear-gradient(to bottom, transparent, rgba(255,0,0,0.4) 5%, rgba(255,0,0,0.4) 95%, transparent); pointer-events:none;"></div>
+
+        <!-- each pillar mobile -->
+        <div class="reveal flex gap-6 mb-8" style="transition-delay:0s">
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-8 h-8 border border-brand flex items-center justify-center bg-black z-10">
+              <span class="text-brand text-xs font-black">01</span>
+            </div>
+          </div>
+          <div class="pillar-card p-6 flex-1">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold mb-1 block">Aquisição</span>
+            <h3 class="text-white font-black text-xl uppercase mb-3">Atrair os Certos</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Funil de atração com tráfego pago, SEO e conteúdo estratégico para prospects qualificados.</p>
+          </div>
+        </div>
+
+        <div class="reveal flex gap-6 mb-8" style="transition-delay:0.08s">
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-8 h-8 border border-brand flex items-center justify-center bg-black z-10">
+              <span class="text-brand text-xs font-black">02</span>
+            </div>
+          </div>
+          <div class="pillar-card p-6 flex-1">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold mb-1 block">Conversão</span>
+            <h3 class="text-white font-black text-xl uppercase mb-3">Fechar Mais</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Páginas de alta conversão, automações de e-mail, chatbots IA e processos de vendas otimizados.</p>
+          </div>
+        </div>
+
+        <div class="reveal flex gap-6 mb-8" style="transition-delay:0.16s">
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-8 h-8 border border-brand flex items-center justify-center bg-black z-10">
+              <span class="text-brand text-xs font-black">03</span>
+            </div>
+          </div>
+          <div class="pillar-card p-6 flex-1">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold mb-1 block">Monetização</span>
+            <h3 class="text-white font-black text-xl uppercase mb-3">Lucrar Mais</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">LTV maximizado com upsells, fidelização e precificação inteligente orientada por valor.</p>
+          </div>
+        </div>
+
+        <div class="reveal flex gap-6" style="transition-delay:0.24s">
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-8 h-8 border border-brand flex items-center justify-center bg-black z-10">
+              <span class="text-brand text-xs font-black">04</span>
+            </div>
+          </div>
+          <div class="pillar-card p-6 flex-1">
+            <span class="text-brand text-xs uppercase tracking-widest font-bold mb-1 block">Escala</span>
+            <h3 class="text-white font-black text-xl uppercase mb-3">Crescer Sem Limite</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Amplificamos tudo. Mais budget, mais canais, crescimento previsível e estruturado.</p>
+          </div>
+        </div>
+
+      </div><!-- /mobile timeline -->
+
+    </div>
+  </section>
+
+
   <!-- ══════════════════════════════════
        ANTES & DEPOIS
   ══════════════════════════════════ -->
   <section class="py-28 px-6 bg-black">
     <div class="max-w-5xl mx-auto">
- 
-      <!-- heading -->
       <div class="reveal text-center mb-16">
         <p class="text-brand text-xs uppercase tracking-widest mb-3">A Transformação Real</p>
         <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
@@ -384,95 +890,62 @@
         </h2>
         <div class="sep mt-6"></div>
       </div>
- 
-      <!-- comparison grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
- 
-        <!-- ANTES — O Caos -->
         <div class="reveal card-chaos p-8 md:p-10">
           <div class="flex items-center gap-3 mb-8">
             <div class="w-3 h-3 rounded-full bg-gray-600"></div>
             <span class="text-gray-500 text-xs uppercase tracking-widest font-semibold">Estado Atual</span>
           </div>
           <h3 class="text-2xl md:text-3xl font-black text-gray-300 mb-8 uppercase">Empresa Comum</h3>
- 
           <ul class="space-y-5">
             <li class="flex items-start gap-4">
               <span class="icon-cross text-xl mt-0.5">✕</span>
-              <div>
-                <p class="text-gray-300 font-semibold">Lenta e Reativa</p>
-                <p class="text-gray-600 text-sm mt-0.5">Semanas para tomar uma decisão. Sempre apagando incêndios.</p>
-              </div>
+              <div><p class="text-gray-300 font-semibold">Lenta e Reativa</p><p class="text-gray-600 text-sm mt-0.5">Semanas para tomar uma decisão. Sempre apagando incêndios.</p></div>
             </li>
             <li class="flex items-start gap-4">
               <span class="icon-cross text-xl mt-0.5">✕</span>
-              <div>
-                <p class="text-gray-300 font-semibold">Invisível no Mercado</p>
-                <p class="text-gray-600 text-sm mt-0.5">Sem presença digital real. Concorrentes roubando seus clientes.</p>
-              </div>
+              <div><p class="text-gray-300 font-semibold">Invisível no Mercado</p><p class="text-gray-600 text-sm mt-0.5">Sem presença digital real. Concorrentes roubando seus clientes.</p></div>
             </li>
             <li class="flex items-start gap-4">
               <span class="icon-cross text-xl mt-0.5">✕</span>
-              <div>
-                <p class="text-gray-300 font-semibold">Processos Quebrados</p>
-                <p class="text-gray-600 text-sm mt-0.5">Planilhas, WhatsApp desorganizado e retrabalho constante.</p>
-              </div>
+              <div><p class="text-gray-300 font-semibold">Processos Quebrados</p><p class="text-gray-600 text-sm mt-0.5">Planilhas, WhatsApp desorganizado e retrabalho constante.</p></div>
             </li>
             <li class="flex items-start gap-4">
               <span class="icon-cross text-xl mt-0.5">✕</span>
-              <div>
-                <p class="text-gray-300 font-semibold">Lucro Imprevisível</p>
-                <p class="text-gray-600 text-sm mt-0.5">Um mês bom, três ruins. Sem controle, sem previsibilidade.</p>
-              </div>
+              <div><p class="text-gray-300 font-semibold">Lucro Imprevisível</p><p class="text-gray-600 text-sm mt-0.5">Um mês bom, três ruins. Sem controle, sem previsibilidade.</p></div>
             </li>
           </ul>
         </div>
- 
-        <!-- DEPOIS — O Padrão Starker -->
         <div class="reveal card-starker p-8 md:p-10" style="transition-delay:0.15s">
           <div class="flex items-center gap-3 mb-8">
             <div class="w-3 h-3 rounded-full bg-brand"></div>
             <span class="text-brand text-xs uppercase tracking-widest font-semibold">Padrão Starker</span>
           </div>
           <h3 class="text-2xl md:text-3xl font-black text-white mb-8 uppercase">Empresa <span class="text-brand">STARKER</span></h3>
- 
           <ul class="space-y-5">
             <li class="flex items-start gap-4">
               <span class="icon-check text-xl mt-0.5">✔</span>
-              <div>
-                <p class="text-white font-semibold">Automatizada e Ágil</p>
-                <p class="text-gray-400 text-sm mt-0.5">Fluxos rodando sozinhos. Time focado em crescimento.</p>
-              </div>
+              <div><p class="text-white font-semibold">Automatizada e Ágil</p><p class="text-gray-400 text-sm mt-0.5">Fluxos rodando sozinhos. Time focado em crescimento.</p></div>
             </li>
             <li class="flex items-start gap-4">
               <span class="icon-check text-xl mt-0.5">✔</span>
-              <div>
-                <p class="text-white font-semibold">Escala Batendo Todo Mês</p>
-                <p class="text-gray-400 text-sm mt-0.5">Tráfego pago e orgânico trabalhando em sinergia total.</p>
-              </div>
+              <div><p class="text-white font-semibold">Escala Batendo Todo Mês</p><p class="text-gray-400 text-sm mt-0.5">Tráfego pago e orgânico trabalhando em sinergia total.</p></div>
             </li>
             <li class="flex items-start gap-4">
               <span class="icon-check text-xl mt-0.5">✔</span>
-              <div>
-                <p class="text-white font-semibold">Atendimento Instantâneo</p>
-                <p class="text-gray-400 text-sm mt-0.5">IA respondendo leads em segundos, 24h por dia, sem parar.</p>
-              </div>
+              <div><p class="text-white font-semibold">Atendimento Instantâneo</p><p class="text-gray-400 text-sm mt-0.5">IA respondendo leads em segundos, 24h por dia, sem parar.</p></div>
             </li>
             <li class="flex items-start gap-4">
               <span class="icon-check text-xl mt-0.5">✔</span>
-              <div>
-                <p class="text-white font-semibold">Lucro Previsível</p>
-                <p class="text-gray-400 text-sm mt-0.5">Dashboard em tempo real. Você sabe exatamente o que vai faturar.</p>
-              </div>
+              <div><p class="text-white font-semibold">Lucro Previsível</p><p class="text-gray-400 text-sm mt-0.5">Dashboard em tempo real. Você sabe exatamente o que vai faturar.</p></div>
             </li>
           </ul>
         </div>
- 
       </div>
     </div>
   </section>
- 
- 
+
+
   <!-- ══════════════════════════════════
        MANIFESTO / URGÊNCIA
   ══════════════════════════════════ -->
@@ -485,7 +958,7 @@
           <span class="text-brand">seu concorrente escala.</span>
         </h2>
         <p class="mt-6 text-gray-400 text-lg leading-relaxed">
-          Mercado não espera. Empresas que não se automatizam hoje são engolidas amanhã. 
+          Mercado não espera. Empresas que não se automatizam hoje são engolidas amanhã.
           O Padrão Starker não é luxo — é sobrevivência.
         </p>
         <div class="mt-3 text-gray-500 text-base italic">
@@ -494,14 +967,111 @@
       </div>
     </div>
   </section>
- 
- 
+
+
   <!-- ══════════════════════════════════
-       CAPTAÇÃO DE LEADS / CTA FINAL
+       FAQ ACORDEÃO
   ══════════════════════════════════ -->
-  <section class="py-28 px-6">
+  <section id="faq" class="py-28 px-6">
+    <div class="max-w-3xl mx-auto">
+
+      <!-- heading -->
+      <div class="reveal text-center mb-16">
+        <p class="text-brand text-xs uppercase tracking-widest mb-3">Perguntas Frequentes</p>
+        <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
+          TIRE SUAS <span class="text-brand">DÚVIDAS</span>
+        </h2>
+        <div class="sep mt-6"></div>
+      </div>
+
+      <!-- FAQ items -->
+      <div class="flex flex-col gap-3" id="faq-list">
+
+        <!-- 1 -->
+        <div class="reveal faq-item" style="transition-delay:0s">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span class="faq-q">Em quanto tempo começo a ver resultados?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p class="text-gray-400 text-sm leading-relaxed">
+                Os primeiros sinais aparecem em 30 a 45 dias — otimizações de conversão, automações rodando e anúncios calibrados já geram impacto rápido. Resultados de escala real se consolidam entre 90 e 180 dias, quando todos os pilares estão operando em sinergia. Performance séria exige estrutura sólida, não atalhos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="reveal faq-item" style="transition-delay:0.06s">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span class="faq-q">Preciso ter uma empresa grande para trabalhar com a STARKER?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p class="text-gray-400 text-sm leading-relaxed">
+                Não. Trabalhamos com empresas que já faturam e querem crescer com inteligência — independente do porte. O que importa é a ambição do gestor e a disposição para implementar mudanças. Pequenas empresas com mentalidade de escala crescem mais rápido do que grandes corporações engessadas.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="reveal faq-item" style="transition-delay:0.12s">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span class="faq-q">O que diferencia a STARKER de outras consultorias?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p class="text-gray-400 text-sm leading-relaxed">
+                A maioria das consultorias entrega PowerPoints. A STARKER entrega execução. Somos especialistas em integrar automação, inteligência artificial e tráfego pago num único sistema coeso — não em silos isolados. Nosso modelo é baseado em performance: você vê os números mudando, não apenas recebe relatórios bonitos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="reveal faq-item" style="transition-delay:0.18s">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span class="faq-q">Como funciona o diagnóstico gratuito?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p class="text-gray-400 text-sm leading-relaxed">
+                É uma conversa de 30 minutos via WhatsApp ou videochamada com um de nossos especialistas. Mapeamos seus gargalos principais — marketing, vendas, processos ou gestão — e apresentamos um plano de ação concreto. Sem pitch de vendas, sem enrolação. Se fizer sentido para ambos, avançamos. Caso contrário, você sai com clareza de onde agir.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="reveal faq-item" style="transition-delay:0.24s">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span class="faq-q">Vocês garantem os resultados?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-body-inner">
+              <p class="text-gray-400 text-sm leading-relaxed">
+                Garantimos dedicação total, estratégias baseadas em dados e execução impecável. Resultados dependem de variáveis que incluem mercado, sazonalidade e comprometimento do cliente — nenhuma consultoria séria garante números específicos sem conhecer profundamente o negócio. O que garantimos é clareza absoluta sobre o que será feito, por que será feito e como mediremos o progresso.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /faq-list -->
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       CTA FINAL
+  ══════════════════════════════════ -->
+  <section class="py-28 px-6 scan-grid border-t border-sharp">
     <div class="max-w-2xl mx-auto text-center">
- 
       <div class="reveal">
         <p class="text-brand text-xs uppercase tracking-widest mb-4">Próximo Passo</p>
         <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
@@ -513,20 +1083,14 @@
           Em uma conversa de 30 minutos, nosso especialista mapeia os gargalos do seu negócio e apresenta um plano de ação concreto — sem enrolação, sem pitch de vendas.
         </p>
       </div>
- 
-      <!-- CTA Block -->
       <div class="reveal mt-12 flex flex-col items-center gap-4" style="transition-delay:0.2s">
         <a href="https://wa.me/559281660856?text=Olá%20Helio,%20vi%20o%20site%20da%20STARKER%20e%20quero%20o%20Padrão%20Starker%20na%20minha%20empresa!"
            target="_blank"
            class="btn-red w-full max-w-md text-center text-base">
           QUERO MEU DIAGNÓSTICO GRATUITO
         </a>
-        <p class="text-gray-600 text-xs uppercase tracking-widest">
-          Via WhatsApp · Resposta em até 1h · Sem compromisso
-        </p>
+        <p class="text-gray-600 text-xs uppercase tracking-widest">Via WhatsApp · Resposta em até 1h · Sem compromisso</p>
       </div>
- 
-      <!-- trust badges -->
       <div class="reveal mt-16 grid grid-cols-3 gap-4 max-w-md mx-auto" style="transition-delay:0.3s">
         <div class="text-center">
           <div class="text-brand text-2xl font-black">100%</div>
@@ -541,31 +1105,107 @@
           <p class="text-gray-600 text-xs mt-1 uppercase tracking-wide">Resposta</p>
         </div>
       </div>
- 
     </div>
   </section>
- 
- 
+
+
   <!-- ══════════════════════════════════
-       FOOTER
+       RODAPÉ PROFISSIONAL
   ══════════════════════════════════ -->
-  <footer class="border-t border-sharp py-10 px-6">
-    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <span class="text-white font-black text-xl tracking-widest uppercase">
-        STARK<span class="text-brand">ER</span>
-      </span>
-      <p class="text-gray-600 text-xs text-center">
-        © 2025 Starker Consultoria. Todos os direitos reservados.
-      </p>
-      <a href="https://wa.me/559281660856?text=Olá%20Helio,%20vi%20o%20site%20da%20STARKER%20e%20quero%20o%20Padrão%20Starker%20na%20minha%20empresa!"
-         target="_blank"
-         class="text-brand text-xs uppercase tracking-widest hover:underline">
-        +55 92 8166-0856
-      </a>
+  <footer class="footer-pro pt-16 pb-8 px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- top row: brand + nav + social -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+
+        <!-- brand column -->
+        <div>
+          <a href="#hero" class="text-white font-black text-2xl tracking-widest uppercase no-underline block mb-4">
+            STARK<span class="text-brand">ER</span>
+          </a>
+          <p class="text-gray-600 text-sm leading-relaxed max-w-xs">
+            Engenharia de performance para empresas que recusam mediocridade. Automação, IA e tráfego — integrados.
+          </p>
+          <!-- social links -->
+          <div class="flex items-center gap-3 mt-6">
+            <!-- Instagram -->
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <!-- LinkedIn -->
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+            <!-- WhatsApp -->
+            <a href="https://wa.me/559281660856" target="_blank" class="social-link" aria-label="WhatsApp">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- nav column -->
+        <div>
+          <p class="text-white text-xs uppercase tracking-widest font-bold mb-5">Navegação</p>
+          <nav class="flex flex-col gap-3">
+            <a href="#hero"         class="footer-nav-link">Início</a>
+            <a href="#servicos"     class="footer-nav-link">Serviços</a>
+            <a href="#metodologia"  class="footer-nav-link">Metodologia</a>
+            <a href="#faq"          class="footer-nav-link">FAQ</a>
+          </nav>
+        </div>
+
+        <!-- contact column -->
+        <div>
+          <p class="text-white text-xs uppercase tracking-widest font-bold mb-5">Contato</p>
+          <div class="flex flex-col gap-3">
+            <a href="https://wa.me/559281660856" target="_blank" class="footer-nav-link flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              +55 92 8166-0856
+            </a>
+            <a href="mailto:contato@starker.com.br" class="footer-nav-link flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              contato@starker.com.br
+            </a>
+            <span class="footer-nav-link flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Manaus, AM — Brasil
+            </span>
+          </div>
+        </div>
+
+      </div><!-- /top row -->
+
+      <!-- divider -->
+      <hr class="red-rule mb-8" />
+
+      <!-- bottom bar -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+        <p class="text-gray-700 text-xs uppercase tracking-widest">
+          © 2025 Starker Consultoria. Todos os direitos reservados.
+        </p>
+        <!-- signature -->
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-px bg-brand opacity-50"></div>
+          <span class="text-gray-600 text-xs uppercase tracking-widest font-semibold">
+            STARKER — <span class="text-brand">Engenharia de Performance</span>
+          </span>
+          <div class="w-8 h-px bg-brand opacity-50"></div>
+        </div>
+        <p class="text-gray-700 text-xs uppercase tracking-widest">
+          Política de Privacidade
+        </p>
+      </div>
+
     </div>
   </footer>
- 
- 
+
+
   <!-- ══════════════════════════════════
        FLOATING WHATSAPP BUTTON
   ══════════════════════════════════ -->
@@ -577,31 +1217,94 @@
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </svg>
   </a>
- 
- 
+
+
   <!-- ══════════════════════════════════
-       JS: Scroll Reveal
+       JAVASCRIPT
   ══════════════════════════════════ -->
   <script>
-    // Reveal on scroll
-    const observer = new IntersectionObserver((entries) => {
+    /* ── Scroll reveal ── */
+    const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.12 });
- 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
- 
-    // Make hero elements visible immediately
-    document.querySelectorAll('.reveal').forEach((el, i) => {
-      if (el.closest('section')?.classList.contains('scan-grid')) {
-        setTimeout(() => el.classList.add('visible'), i * 150);
+    }, { threshold: 0.10 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Immediately reveal elements in the first viewport (hero area)
+    document.querySelectorAll('.reveal').forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        setTimeout(() => el.classList.add('visible'), 80);
       }
     });
+
+    /* ── Navbar: transparent → black on scroll ── */
+    const navbar = document.getElementById('navbar');
+    const SCROLL_THRESHOLD = 60; // px before navbar turns black
+
+    function updateNavbar() {
+      if (window.scrollY > SCROLL_THRESHOLD) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', updateNavbar, { passive: true });
+    updateNavbar(); // run on load
+
+    /* ── Hamburger menu ── */
+    const hamburger   = document.getElementById('hamburger');
+    const mobileMenu  = document.getElementById('mobile-menu');
+    const ham1 = document.getElementById('ham-1');
+    const ham2 = document.getElementById('ham-2');
+    const ham3 = document.getElementById('ham-3');
+    let menuOpen = false;
+
+    function closeMenu() {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      ham1.style.transform = '';
+      ham2.style.opacity = '1';
+      ham3.style.transform = '';
+    }
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open', menuOpen);
+      // animate hamburger to X
+      if (menuOpen) {
+        ham1.style.transform = 'translateY(8px) rotate(45deg)';
+        ham2.style.opacity = '0';
+        ham3.style.transform = 'translateY(-8px) rotate(-45deg)';
+      } else {
+        closeMenu();
+      }
+    });
+
+    /* ── FAQ Accordion ── */
+    function toggleFaq(triggerBtn) {
+      const item   = triggerBtn.closest('.faq-item');
+      const body   = item.querySelector('.faq-body');
+      const isOpen = item.classList.contains('open');
+
+      // close all
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-body').classList.remove('open');
+      });
+
+      // open clicked if it was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        body.classList.add('open');
+      }
+    }
   </script>
- 
+
 </body>
 </html>
- 
